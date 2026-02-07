@@ -1,0 +1,6 @@
+#!/bin/bash
+
+# Provides information about the ~/.dotfiles directory.
+
+num_files=$(find "${HOME}"/.dotfiles | wc -l)
+echo "Total number of dotfiles for ${USER}: ${num_files}"

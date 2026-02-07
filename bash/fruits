@@ -1,0 +1,26 @@
+#!/bin/bash
+
+if [[ -z $1 ]]; then
+	echo "Usage: $0 <fruit>"
+	exit 1
+fi
+
+case $1 in
+  apple)
+	  echo "Red"
+	  exit 0
+	  ;;
+  banana)
+	  echo "Yellow"
+	  exit 0
+	  ;;
+  kiwi)
+	  echo "Green"
+	  exit 0
+	  ;;
+  *)
+	  echo "Unknow fruit"
+	  exit 1
+	  ;;
+  esac
+
