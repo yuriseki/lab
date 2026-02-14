@@ -1,0 +1,24 @@
+#!/bin/bash
+
+function get_filenames() {
+	while IFS= read -r -d '' file; do
+		# I Just want to create symliks to directories
+		[[ -d "$file" ]] || continue
+		local curren_directory=$file
+		local symbolic_link_location="${file#*.dotfiles/*/}"
+		local symbolic_link_location="${symbolic_link_location#*.*/*/}"
+    
+    # Only create links for the files that or the directory starts whit "."
+		[[ "$symbolic_link_location" == .*/* ]] || continue 
+
+    # Don't create symbolic links for `.local`
+    [[ "$symbolic_link_location" != .local* ]] || continue 
+
+    # Simulate the symlink creation. I don't want to mess up with my current dotfiles workflow.
+		echo "# ln -s ${curren_directory} ${HOME}/${symbolic_link_location}"
+	done < <(find "${HOME}/.dotfiles" -name "*" -print0)
+}
+
+filenames=$(get_filenames)
+echo "$filenames"
+

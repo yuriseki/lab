@@ -1,0 +1,10 @@
+#!/bin/bash
+
+# Loops through ~/.dotfiles files 
+# Skip if not a regular file
+# Print each filename
+
+while IFS= read -r -d '' file; do
+  [[ -f "$file" ]] || continue
+  echo "Filename: $file"
+done < <(find "${HOME}/.dotfiles" -name "*" -print0)
