@@ -1,0 +1,30 @@
+#!/bin/bash
+set -e
+
+CLUSTER_NAME="learning"
+
+# Check if cluster exists
+if kind get clusters | grep -q "^${CLUSTER_NAME}$"; then
+  echo "Cluster ${CLUSTER_NAME} already exists"
+else
+  echo "Creating cluster ${CLUSTER_NAME}..."
+  kind create cluster --name ${CLUSTER_NAME} --config kind-flannel-config.yaml
+fi
+
+# Load kernel modules
+echo "Loading kernel modules..."
+for node in $(kind get nodes --name ${CLUSTER_NAME}); do
+  docker exec "$node" modprobe br_netfilter
+  docker exec "$node" sysctl -w net.bridge.bridge-nf-call-iptables=1
+done
+
+# Install Flannel if not already installed
+if ! kubectl get namespace kube-flannel &> /dev/null; then
+  echo "Installing Flannel..."
+  kubectl apply -f https://github.com/flannel-io/flannel/releases/latest/download/kube-flannel.yml
+else
+  echo "Flannel already installed"
+fi
+
+echo "Cluster ready!"
+kubectl get nodes
