@@ -1,0 +1,5 @@
+#!/bin/bash
+
+/usr/local/bin/mise trust /workspaces/first-dev-container/mise.toml
+
+
